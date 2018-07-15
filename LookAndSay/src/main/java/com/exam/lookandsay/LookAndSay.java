@@ -1,5 +1,7 @@
 package com.exam.lookandsay;
 
+import javax.management.RuntimeErrorException;
+
 /* Define a function LookAndSay as follows 
  *  Read off the digits of the input counting the number of digits in groups of the same digit.
  *  Ex. 
@@ -20,14 +22,68 @@ package com.exam.lookandsay;
  *   Create the LookAndSay Method defined below and pass all the Unit tests and try to manage possible exceptions.
  */
 public class LookAndSay {
-	
-	
+
 	public String LookAndSay(String input, int n) {
-		//TODO DEFINE FUNCTION HERE
-		return "";
-    }
+		// arguments validation
+		if (input == null) {
+			throw new NullPointerException("null input not allowed");
+		}
+
+		StringBuilder result = new StringBuilder();
+
+		input = input + " "; // for empty/single input
+		char temp = input.charAt(0);
+		int ctr = 0;
+
+		for (char digit : input.toCharArray()) {
+			if (digit != temp) {
+				result.append(ctr).append(temp);
+				ctr = 1;
+				temp = digit;
+			} else {
+				ctr++;
+			}
+		}
+
+		if (n == 0) {
+			return input.trim();
+		} else if (n < 0) {
+			throw new IllegalArgumentException("negative n not allowed");
+		} else if (n > 1) {
+			return LookAndSay(result.toString(), n - 1);
+		} else {
+			return result.toString().trim();
+		}
+	}
+
+	public String LookAndSay1(String input, int n) {
+		// arguments validation
+		if (input == null) {
+			throw new NullPointerException("null input not allowed");
+		}
+		if (n < 0) {
+			throw new IllegalArgumentException("negative n not allowed");
+		}
+
+		for (int x = 1; x <= n; x++) {
+			StringBuilder result = new StringBuilder();
+			for (int i = 0; i < input.length(); i++) {
+				int ctr = 1;
+				for (int j = i + 1; j < input.length(); j++) {
+					if (input.charAt(i) == input.charAt(j)) {
+						ctr += 1;
+						i = j;
+					} else {
+						i = --j;
+						break;
+					}
+				}
+				result.append(ctr + "" + input.charAt(i));
+			}
+			input = result.toString();
+		}
+
+		return input;
+	}
 
 }
-
-
-
